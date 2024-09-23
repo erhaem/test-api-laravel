@@ -21,13 +21,13 @@ class ApiKeyMiddleware
         $apiKey = $request->header('X-API-KEY');
 
         // Check if the API key matches the one stored in the environment file
-        if ($apiKey !== env('ATTENDIFY_API_KEY')) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Unauthorized'
-            ], 401);
+        if ($apiKey === env('ATTENDIFY_API_KEY')) {
+            return $next($request);
         }
 
-        return $next($request);
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Unauthorized'
+        ], 401);
     }
 }
